@@ -7,16 +7,28 @@
     url = "github:numtide/flake-utils";
     inputs.systems.follows = "systems";
   };
-  inputs.android-nixpkgs = {
+  inputs.android-nixpkgs-src = {
     url = "github:tadfisher/android-nixpkgs/stable";
-    inputs.nixpkgs.follows = "nixpkgs";
+    flake = false;
   };
 
-  outputs = { nixpkgs, flake-utils, android-nixpkgs, ... }:
+  outputs = { nixpkgs, flake-utils, android-nixpkgs-src, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-        androidSdk = android-nixpkgs.sdk.${system} (sdkPkgs: with sdkPkgs; [
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        androidNixpkgs = pkgs.applyPatches {
+          name = "android-nixpkgs";
+          src = android-nixpkgs-src;
+          patches = [ ./patches/android-nixpkgs-host-platform.patch ];
+        };
+        androidPkgs = import "${androidNixpkgs}/default.nix" {
+          inherit pkgs;
+          channel = "stable";
+        };
+        androidSdk = androidPkgs.sdk (sdkPkgs: with sdkPkgs; [
           cmdline-tools-latest
           platform-tools
           build-tools-35-0-0

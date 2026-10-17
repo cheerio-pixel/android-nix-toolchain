@@ -17,6 +17,10 @@ those tools in their own flake.
 Node.js, Ionic, language servers, linters, formatters, `just`, and app-specific
 native libraries are intentionally not included.
 
+The pinned upstream Android SDK source still uses deprecated `stdenv.isLinux`
+in several Linux platform checks. This flake patches those checks to use
+`stdenv.hostPlatform.isLinux` instead.
+
 ## Enter the shell
 
 Use the published flake directly:

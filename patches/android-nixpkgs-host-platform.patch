@@ -1,0 +1,55 @@
+--- a/pkgs/android/build-tools.nix
++++ b/pkgs/android/build-tools.nix
+@@ -14,3 +14,3 @@
+ mkGeneric (
+-  lib.optionalAttrs stdenv.isLinux {
++  lib.optionalAttrs stdenv.hostPlatform.isLinux {
+     nativeBuildInputs = [
+--- a/pkgs/android/prebuilt.nix
++++ b/pkgs/android/prebuilt.nix
+@@ -17 +17 @@
+-  buildArgs = lib.optionalAttrs stdenv.isLinux (
++  buildArgs = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+--- a/pkgs/android/emulator.nix
++++ b/pkgs/android/emulator.nix
+@@ -46 +46 @@
+-  lib.optionalAttrs stdenv.isLinux {
++  lib.optionalAttrs stdenv.hostPlatform.isLinux {
+--- a/pkgs/android/ndk.nix
++++ b/pkgs/android/ndk.nix
+@@ -15,5 +15,5 @@
+-assert stdenv.isLinux -> autoPatchelfHook != null;
+-assert stdenv.isLinux -> bzip2 != null;
+-assert stdenv.isLinux -> libxcrypt-legacy != null;
+-assert stdenv.isLinux -> ncurses5 != null;
+-assert stdenv.isLinux -> zlib != null;
++assert stdenv.hostPlatform.isLinux -> autoPatchelfHook != null;
++assert stdenv.hostPlatform.isLinux -> bzip2 != null;
++assert stdenv.hostPlatform.isLinux -> libxcrypt-legacy != null;
++assert stdenv.hostPlatform.isLinux -> ncurses5 != null;
++assert stdenv.hostPlatform.isLinux -> zlib != null;
+@@ -27 +27 @@
+-assert (stdenv.isLinux && lib.versionOlder versionMajor "18") -> libedit != null;
++assert (stdenv.hostPlatform.isLinux && lib.versionOlder versionMajor "18") -> libedit != null;
+@@ -57 +57 @@
+-    ++ lib.optionals stdenv.isLinux [
++    ++ lib.optionals stdenv.hostPlatform.isLinux [
+@@ -61 +61 @@
+-    buildInputs = lib.optionals stdenv.isLinux (
++    buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
+@@ -77 +77 @@
+-      ${lib.optionalString (stdenv.isLinux && lib.versionOlder versionMajor "18") ''
++      ${lib.optionalString (stdenv.hostPlatform.isLinux && lib.versionOlder versionMajor "18") ''
+@@ -81 +81 @@
+-      ${lib.optionalString (stdenv.isLinux) ''
++      ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
+--- a/pkgs/android/platform-tools.nix
++++ b/pkgs/android/platform-tools.nix
+@@ -9 +9 @@
+-  lib.optionalAttrs stdenv.isLinux {
++  lib.optionalAttrs stdenv.hostPlatform.isLinux {
+--- a/pkgs/android/tools.nix
++++ b/pkgs/android/tools.nix
+@@ -22 +22 @@
+-  lib.optionalAttrs stdenv.isLinux {
++  lib.optionalAttrs stdenv.hostPlatform.isLinux {
